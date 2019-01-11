@@ -1,3 +1,4 @@
+from html_checkbox_cancer import ml_script
 import web
 
 urls = (
@@ -13,7 +14,13 @@ class Home:
         return render.gui_home()
 
     def POST(self):
-        return web.input()
+        data = web.input()
+        seq_data = (data.preg, data.plas, data.pres, data.skin, data.test, data.mass, data.pedi, data.age)
+        result = ml_script.ml_script().result(seq_data)
+        if result:
+            return "Positive"
+        else:
+            return "Negative"
 
 
 if __name__ == "__main__":
