@@ -1,4 +1,4 @@
-from html_checkbox_cancer import ml_script
+import ml_script
 import web
 
 urls = (
