@@ -1,6 +1,9 @@
 import plotly.plotly as py
 import plotly.graph_objs as go
 
+import plotly
+plotly.tools.set_credentials_file(username='HimanshuSharma789', api_key='A5yUsjmBoSwU7lzXLTLX')
+
 trace0 = go.Scatter(
     x=[1, 2, 3, 4],
     y=[10, 15, 13, 17]
