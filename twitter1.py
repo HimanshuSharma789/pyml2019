@@ -1,7 +1,5 @@
 import tweepy
 
-# Fill the X's with the credentials obtained by  
-# following the above mentioned procedure. 
 consumer_key = ""
 consumer_secret = ""
 access_key = ""
