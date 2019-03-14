@@ -20,35 +20,76 @@ class Application(QWidget):
         k=0
         for i in range(2):
             for j in range(2): # range(len(effect_list)/2)
-                # b.clicked.connect(lambda: self.applyEffect(b.text))
-                grid.addWidget(QPushButton(effect_list[k]), i, j)
+                button = QPushButton(effect_list[k])
+                button.clicked.connect(self.applyEffect)
+                grid.addWidget(button, i, j)
                 k=k+1
 
-    # def applyEffect(self, v):
-        # print(v)
-
-        '''
         # for video processing >>>
-        image_label = QLabel(self)
-        org_pic = cv2.imread('perspective_image.png')
-        height, width, bpc = org_pic.shape
-        image = QImage(org_pic.data, width, height, bpc*width, QImage.Format_RGB888)
-        pixMap = QPixmap(image)
-        image_label.setPixmap(pixMap)
+        self.image_label = QLabel(self)
+        self.org_pic = cv2.imread('Penguins.jpg')
+        self.org_pic = cv2.resize(self.org_pic,(400,300))
+        pic = cv2.cvtColor(self.org_pic, cv2.COLOR_BGR2RGB)
+        self.display(pic)    
         # end video processing <<<
-        '''
 
-        
+        '''
         # for image processing >>>
         image_label = QLabel(self)
         pixmap = QPixmap('perspective_image.png')
         image_label.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
         # end image processing <<<
+        '''
 
-        main_layout.addWidget(image_label)
+        main_layout.addWidget(self.image_label)
         main_layout.addLayout(grid)
         self.setLayout(main_layout)
+
+
+    def applyEffect(self):
+        btn = self.sender()
+        print(btn.text())
+
+        if btn.text() == 'none':
+            pic = cv2.cvtColor(self.org_pic, cv2.COLOR_BGR2RGB)
+            self.display(pic)
+        
+        if btn.text() == 'b/w':
+            gray_pic = cv2.cvtColor(self.org_pic, cv2.COLOR_BGR2GRAY)
+            gray_pic = cv2.cvtColor(gray_pic, cv2.COLOR_GRAY2BGR)
+            self.display(gray_pic)
+            '''
+            bpc = 1 if gray_pic.ndim == 2 else gray_pic.shape[2]
+            ### strides = bpc*width
+            '''
+            '''
+            height, width = gray_pic.shape[:2]
+            image = QImage(gray_pic.data, width, height, gray_pic.strides[0], QImage.Format_RGB888)
+            pixMap = QPixmap(image)
+            self.image_label.setPixmap(pixMap)
+            # self.resize(width, height)
+            '''
+        if btn.text() == 'blur':
+            blur = cv2.cvtColor(self.org_pic, cv2.COLOR_BGR2RGB)
+            blur = cv2.blur(blur,(5,5))
+            self.display(blur)
+
+        if btn.text() == 'negative':
+            negative = cv2.bitwise_not(self.org_pic)
+            self.display(negative)
+
+
+    def display(self, picture):
+        # picture = cv2.resize(picture,(400,300))
+        height, width, bpc = picture.shape
+        image = QImage(picture.data, width, height, bpc*width, QImage.Format_RGB888)
+        pixMap = QPixmap(image)
+        self.image_label.setPixmap(pixMap)
+        # self.resize(width, height)
+        
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
